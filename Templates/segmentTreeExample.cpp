@@ -2,6 +2,8 @@
 
 using namespace std;
 
+//nao testado!
+
 #define MAXN 30010
 #define LEFT(p) (2*p)
 #define RIGHT(p) (2*p+1)
@@ -55,8 +57,12 @@ void update(int p, int idx, int beg, int end, char c) {
 }
 
 
-bool read(int p) {
-	return (st[p].minimum >= 0 && st[p].sum == 0);
+node read(int p, int i, int j, int beg, int end)  {
+	if(beg > end || beg > j || end < i) return node();
+	if(beg >= i && end <= j) return st[p];
+	node left = read(LEFT(p), i, j, beg, MID(beg, end));
+	node right = read(RIGHT(p), i, j, MID(beg, end) + 1, end);
+	return join(left, right);
 }
 
 int main() {
@@ -73,7 +79,7 @@ int main() {
 			int q;
 			scanf("%d", &q);
 			if(q == 0) {
-				printf("%s\n", read(1) == true?"YES":"NO"); 
+				printf("%s\n", read(1, 0, n-1, 0, n-1).minimum == 0?"YES":"NO"); 
 			}
 			else {
 				if(word[q-1] == ')') word[q-1] = '(';
