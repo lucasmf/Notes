@@ -90,13 +90,6 @@ int main() {
 			}
 		}
 		
-		/*for(int i = 0; i<=h+1; i++) {
-			for(int j = 0; j<=4*w+1; j++) {
-				printf("%d", color[i][j]);
-			}
-			printf("\n");
-		}*/
-		
 	    for(int i = 1; i<=h; i++) {
 		  for(int j = 1; j<=4*w; j++) {
 			if(grid[i][j] == 1) {
