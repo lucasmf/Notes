@@ -27,6 +27,7 @@ void kmpPreprocess() { // call this before calling kmpSearch()
 } }           // in the example of P = "SEVENTY SEVEN" above
 
 int kmpSearch() { // this is similar as kmpPreprocess(), but on string T
+  
   int ret = 0;
   int i = 0, j = 0; // starting values
   while (i < (int)T.size()) { // search through string T
@@ -43,18 +44,18 @@ int kmpSearch() { // this is similar as kmpPreprocess(), but on string T
 
 int main() {
 	int n;
-	string P;
 	scanf("%d", &n);
-	cin >> P;
+	cin >> P;	
 	kmpPreprocess();
 	T = "0";
 	dp[0].q = kmpSearch();
 	dp[0].beg = "0";
-	dp[0].end = "1";
+	dp[0].end = "0";
 	T = "1";
 	dp[1].q = kmpSearch();
 	dp[1].beg = "1";
 	dp[1].end = "1";
 	printf("%d %d\n", dp[0].q, dp[1].q);
+	
 	return 0;
 }
