@@ -1,15 +1,19 @@
 #include <bits/stdc++.h>
 #include <cstring>
 #include <time.h>
+
 using namespace std;
+
+//AC!
 
 #define MAX_N 100010
 #define MAXN 110
 
 struct p {
-	int q;
+	long long int q;
 	string beg;
 	string end;
+	string palavra;
 	p() {}
 };
 
@@ -35,7 +39,7 @@ int kmpSearch() { // this is similar as kmpPreprocess(), but on string T
     i++; j++; // if same, advance both pointers
     if (j == (int)P.size()) { // a match found when j == m
 	  ret++;
-      printf("P is found at index %d in T\n", i - j);
+      //printf("P is found at index %d in T\n", i - j);
       j = b[j]; // prepare j for the next possible match
 	}
   }
@@ -44,18 +48,38 @@ int kmpSearch() { // this is similar as kmpPreprocess(), but on string T
 
 int main() {
 	int n;
-	scanf("%d", &n);
-	cin >> P;	
-	kmpPreprocess();
-	T = "0";
-	dp[0].q = kmpSearch();
-	dp[0].beg = "0";
-	dp[0].end = "0";
-	T = "1";
-	dp[1].q = kmpSearch();
-	dp[1].beg = "1";
-	dp[1].end = "1";
-	printf("%d %d\n", dp[0].q, dp[1].q);
-	
+	int test = 1;
+	while(scanf("%d", &n) != EOF) {
+		bool flag = false;
+		cin >> P;	
+		kmpPreprocess();
+		T = "0";
+		dp[0].q = kmpSearch();
+		dp[0].palavra = "0";
+		T = "1";
+		dp[1].q = kmpSearch();
+		dp[1].palavra = "1";
+		for(int i = 2; i<=n; i++) {
+			if(dp[i-1].palavra.size() >= P.size() && dp[i-2].palavra.size() >= P.size()) flag = true; 
+			if(!flag) {
+				dp[i].palavra = dp[i-1].palavra + dp[i-2].palavra;
+				T = dp[i].palavra;
+				if(dp[i].palavra.size() >= P.size()) {
+					dp[i].beg = dp[i].palavra.substr(0, P.size()-1);
+					dp[i].end = dp[i].palavra.substr(dp[i].palavra.size()-(P.size()-1), P.size());
+				}
+				dp[i].q = kmpSearch();
+			}
+			else {			
+				T = dp[i-1].end + dp[i-2].beg;
+				dp[i].q = dp[i-1].q + dp[i-2].q + kmpSearch();
+				dp[i].beg = dp[i-1].beg;
+				dp[i].end = dp[i-2].end;
+			}
+			//printf("%d -> %d\n", i, dp[i].q);
+		}
+		printf("Case %d: %lld\n", test, dp[n].q);
+		test++;
+	}
 	return 0;
 }
