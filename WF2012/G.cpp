@@ -38,11 +38,11 @@ vector<pair<double, int> > heightLimits;
 int component[MAXN];
 int componentK[MAXN]; // Usado para pegar a quantidades de aberturas que um no tem em seu componemte com uma altura menor ou igual a dele
 
-void dfs(int p, int idx) {
-	if(component[p] != 0) return;
+void dfs(int p, int idx, double maxHeight) {
+	if(points[p].z - maxHeight > 0.0 || component[p] != 0) return;
 	component[p] = idx;
 	for(int i = 0; i<n; i++) {
-		if(fabs(G[p][i]) < EPS) dfs(i, idx);
+		if(fabs(G[p][i]) < EPS) dfs(i, idx, maxHeight);
 	}
 }
 
@@ -82,14 +82,16 @@ int main() {
 	int idx = 1;
 	for(int i = 0; i<(int)heightLimits.size(); i++) {
 		if(component[heightLimits[i].second] == 0) {
-			dfs(heightLimits[i].second, idx++);
+			dfs(heightLimits[i].second, idx++, 2);
 		}
 	}
 
 	for(int i = 0; i<(int)heightLimits.size(); i++) {
 		int node = heightLimits[i].second;
-		points[node].cumulativeK = componentK[component[node]] + points[node].k;
-		componentK[component[node]] += points[node].k;
+		if(component[node] != 0) {
+			points[node].cumulativeK = componentK[component[node]] + points[node].k;
+			componentK[component[node]] += points[node].k;
+		}
 	}
 
 	for(int i = 0; i<n; i++) {	
