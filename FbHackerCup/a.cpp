@@ -14,14 +14,31 @@ int main() {
 		
 		for(int j = 0; j<(int)n.size(); j++) {
 			pair<char, int> minimum = make_pair(n[j], 0);
-		pair<char, int> maximum = make_pair(n[j], 0);
+		    
 			for(int i = 1; i<(int)n.size(); i++) {
 				if(n[i] != '0') {
 				minimum = min(minimum, make_pair(n[i], i));
+				
+				}
+			}
+			if(minimum.first != n[j]) {
+				break;
+			}
+			
+		}
+
+for(int j = 0; j<(int)n.size(); j++) {
+			
+		    pair<char, int> maximum = make_pair(n[j], 0);
+			for(int i = 1; i<(int)n.size(); i++) {
+				if(n[i] != '0') {
+				
 				maximum = max(maximum, make_pair(n[i], i));
 				}
 			}
+			
 		}
+
 		
 		string nMin = n;
 		string nMax = n;

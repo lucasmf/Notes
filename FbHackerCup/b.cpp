@@ -37,7 +37,7 @@ int main() {
 		int Gp, Gc, Gf;
 		bool flag = false;
 		lista.clear();
-		scanf("%d %d %d", &Gp, &Gc, &Gf);
+		scanf("%d %d %d", &Gp, &Gc, &Gf); //10010
 		int n;
 		scanf("%d", &n);
 		for(int i = 0; i<n; i++) {

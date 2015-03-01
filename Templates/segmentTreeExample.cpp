@@ -4,9 +4,9 @@ using namespace std;
 
 //nao testado!
 
-#define MAXN 30010
-#define LEFT(p) (2*p)
-#define RIGHT(p) (2*p+1)
+#define MAXN 100100
+#define LEFT(p) (2*p+1)
+#define RIGHT(p) (2*p+2)
 #define MID(a, b) ((a+b)/2)
 
 struct node {
@@ -23,8 +23,8 @@ struct node {
 	}
 };
 	
-node st[4*MAXN];
-char word[MAXN];
+node st[8*MAXN];
+char word[2*MAXN];
 
 node join(node left, node right) {
 	int sum = left.sum + right.sum;
@@ -40,7 +40,6 @@ void build(int p, int beg, int end) {
 	}
 	build(LEFT(p), beg, MID(beg, end));
 	build(RIGHT(p), MID(beg, end)+1, end);
-	
 	st[p] = join(st[LEFT(p)], st[RIGHT(p)]);
 	
 }
