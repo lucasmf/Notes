@@ -2,6 +2,8 @@
 
 using namespace std;
 
+//AC!!!!
+
 typedef long long lint;
 #define MAXN 64
 #define MAXT 20
@@ -30,21 +32,25 @@ void crivo() {
 void rec(int idx, lint v, int last) {
 	if(idx == primes.size()) return;
 	for(int i = 0; i<last; i++) {
-		v *= primes[idx];
-		if(v < 0) return;
+		lint aux = v;
+		for(int lol = 0; lol<primes[idx]-1; lol++) {
+			v += aux;
+			if(v < 0) return;
+		}
 		bestNumbers.push_back(v);
 		rec(idx+1, v, i+1);
 	}
 }
 
 lint getQ(lint number) {
+	lint naux = number;
 	vector<int> quantities;
 	quantities.clear();
 	int q[MAXT];
 	memset(q, 0, sizeof(q));
 	int total = 0;
-	/*for(int i = 0; number != 1; i++) {
-		printf("%lld\n", number);
+	for(int i = 0; number != 1; i++) {
+		
 		int add = 0;
 		while(number % primes[i] == 0) {
 			add++;
@@ -53,53 +59,59 @@ lint getQ(lint number) {
 		total += add;
 		if(add != 0)quantities.push_back(add);
 	}
+	
 	for(int i = 2; i<=total; i++) {
-		int aux = i;
+		lint aux = i;
 		for(int j = 0; aux != 1; j++) {
-			while(aux%primes[j] == 0) q[j]++;
-		}
-	}
-	for(int k = 0; k<quantities.size(); k++) {
-		for(int i = 2; i<=quantities[k]; i++) {
-			int aux = i;
-			for(int j = 0; aux != 1; j++) {
-				while(aux%primes[j] == 0) q[j]--;
+			while(aux%primes[j] == 0) {
+				q[j]++;
+				aux/=primes[j];
 			}
 		}
-	}*/
-	lint ret = 1;
-	for(int i = 0; i<MAXN; i++) {
-		while(q[i]) {
-			ret *= q[i];
-			if(ret < 0) return 0;
-			q[i]--;
+	}
+	
+	for(int k = 0; k<quantities.size(); k++) {
+		for(int i = 2; i<=quantities[k]; i++) {
+			lint aux = i;
+			for(int j = 0; aux != 1; j++) {
+				while(aux%primes[j] == 0) {
+					q[j]--;
+					aux/=primes[j];
+				}
+			}
 		}
 	}
+	
+	lint ret = 1;
+	for(int i = 0; i<MAXT; i++) {
+		for(int lol2 = 0; lol2<q[i]; lol2++) {
+			lint aux = ret;
+			for(int lol = 0; lol<primes[i]-1; lol++) {
+				ret += aux;
+				if(ret < 0) return 0;
+			}	
+		}
+	}
+	
 	return ret;
 }
 
 int main() {
-	for(lint i = 1; i*i<65401157644647821LL; i++) {
-		if(65401157644647821LL % i == 0) printf("%lld\n", i);
-	}
 	crivo();
 	long long mul = 1;
-	for(int i = 0; i<primes.size(); i++) {
-		mul = mul*primes[i];
-		printf("-> %lld %lld\n", primes[i], mul);
-	}
 
 	rec(0, 1, 64);
-	printf("%d\n", (int)bestNumbers.size());
+	
 	for(int i = 0; i<(int)bestNumbers.size(); i++) {
 		lint x = getQ(bestNumbers[i]);
-		mm[x] = min(mm[x], bestNumbers[i]);
+
+		mm[x] = mm[x] == 0?bestNumbers[i]:min(mm[x], bestNumbers[i]);
 	}
-	mm[2] = 1;
-	for(int i = 0; i<10; i++) {
-		lint x;
-		scanf("%lld", &x);
-		printf("%lld\n", mm[x]);
+	mm[1] = 2;
+	
+	lint x;
+	while(scanf("%lld", &x) != EOF) {
+		printf("%lld %lld\n", x, mm[x]);
 	}
 	return 0;
 }
