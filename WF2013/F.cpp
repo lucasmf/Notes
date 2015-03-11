@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 
 using namespace std;
+//AC
 
 vector<int> v;
 int n, k;
