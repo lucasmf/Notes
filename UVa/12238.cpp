@@ -10,14 +10,17 @@ int up[MAXN][MAXLOG];
 int pot[MAXLOG];
 bool vis[MAXN];
 int level[MAXN];
+long long dist[MAXN];
+int cost[MAXN];
 
 void pre() {
 	pot[0] = 1;
 	for(int i = 1; i<MAXLOG; i++) pot[i] = pot[i-1]*2;
 }
 
-void buildLCA(int node, int last, int l) {
+void buildLCA(int node, int last, int l, long long c) {
 	if(vis[node]) return;
+	dist[node] = c + cost[node];
 	vis[node] = true;
 	level[node] = l;
 	up[node][0] = last;
@@ -25,7 +28,7 @@ void buildLCA(int node, int last, int l) {
 		up[node][i] = up[up[node][i-1]][i-1];
 	}
 	for(int i = 0; i<(int)G[node].size(); i++) {
-		buildLCA(G[node][i], node, l+1);
+		buildLCA(G[node][i], node, l+1, dist[node]);
 	}
 	return;
 }
@@ -56,23 +59,37 @@ int getLCA(int nodeA, int nodeB) {
 int main() {
 	pre();
 	int n, m;
-	scanf("%d", &n);
-	for(int i = 0; i<n-1; i++) {
-		int a, b;
-		scanf("%d %d", &a, &b);
-		G[a].push_back(b);
-		G[b].push_back(a);
+	while(1) {
+		scanf("%d", &n);
+		if(n == 0) break;
+		for(int i = 0; i<MAXN; i++) {
+			G[i].clear();
+		}
+		memset(dist, 0, sizeof(dist));
+		memset(cost, 0, sizeof(cost));
+		memset(level, 0, sizeof(level));
+		memset(vis, 0, sizeof(vis));
+		memset(up, 0, sizeof(up));
+		for(int i = 1; i<n; i++) {
+			int a, b;
+			scanf("%d %d", &a, &b);
+			G[a].push_back(i);
+			cost[i] = b;
+		}
+
+		buildLCA(0, 0, 0, 0LL);
+
+		scanf("%d", &m);
+		for(int i = 0; i<m; i++) {
+			int a, b;
+			scanf("%d %d", &a, &b);
+			if(a == b) break;
+			if(i != 0) printf(" ");
+			printf("%lld", dist[a]+dist[b]-2*dist[getLCA(a, b)]);
+		}
+		printf("\n");
 	}
 
-	buildLCA(0, 0, 0);
-
-	scanf("%d", &m);
-	for(int i = 0; i<m; i++) {
-		int a, b;
-		scanf("%d %d", &a, &b);
-		if(a == b) break;
-		printf("LCA(%d, %d) =  %d\n", a, b, getLCA(a, b));
-	}
 
 	return 0;
 }
