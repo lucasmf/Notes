@@ -2,6 +2,8 @@
 
 using namespace std;
 
+//ERRADA!!!
+
 #define MAXN (30*2)
 
 vector<int> G[MAXN];
@@ -23,11 +25,6 @@ int main() {
 	
 	scanf("%d", &n);
 
-	for(int i = 'A'; i<='Z'; i++) {
-		G[2*(i-'A')+1].push_back(2*(i-'A')+2);
-		G[2*(i-'A')+2].push_back(2*(i-'A')+1);
-	}
-
 	for(int i = 0; i<n; i++) {
 		int node[4];
 		for(int j = 0; j<4; j++) {
@@ -41,14 +38,51 @@ int main() {
 			}
 		}
 		if(node[0] != 0 && node[2] != 0) {
-			G[node[0]].push_back(node[2]);
-			G[node[2]].push_back(node[0]);
+			if((node[0]&1) == 0) {
+				G[node[0]-1].push_back(node[2]);
+				//G[node[2]].push_back(node[0]-1);
+			}
+			else {
+				G[node[0]+1].push_back(node[2]);
+				//G[node[2]].push_back(node[0]+1);
+			}
+			if((node[2]&1) == 0) {
+				G[node[0]].push_back(node[2]-1);
+				//G[node[2]-1].push_back(node[0]);
+			}
+			else {
+				G[node[0]].push_back(node[2]+1);
+				//G[node[2]+1].push_back(node[0]);
+			}
 		}
 		if(node[1] != 0 && node[3] != 0) {
-			G[node[1]].push_back(node[3]);
-			G[node[3]].push_back(node[1]);
+			if((node[1]&1) == 0) {
+				G[node[1]-1].push_back(node[3]);
+				//G[node[3]].push_back(node[1]-1);
+			}
+			else {
+				G[node[1]+1].push_back(node[3]);
+				//G[node[3]].push_back(node[1]+1);
+			}
+			if((node[3]&1) == 0) {
+				G[node[1]].push_back(node[3]-1);
+				//G[node[3]-1].push_back(node[1]);
+			}
+			else {
+				G[node[1]].push_back(node[3]+1);
+				//G[node[3]+1].push_back(node[1]);
+			}
 		}
 	}
+
+	for(int i = 0; i<MAXN; i++) {
+		printf("%d: ", i);
+		for(int j = 0; j<(int)G[i].size(); j++) {
+			printf("%d ", G[i][j]);
+		}
+		printf("\n");
+	}
+
 	bool hasCicle = false;
 
 	memset(vis, 0, sizeof(vis));
