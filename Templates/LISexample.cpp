@@ -17,5 +17,6 @@ int main() {
 	for(int i = 0; i<(int)B.size(); i++) {
 		v.push_back(m[B[i]]);
 	}
+
 	return 0;
 }
