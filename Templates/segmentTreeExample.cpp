@@ -4,38 +4,34 @@ using namespace std;
 
 //nao testado!
 
-#define MAXN 100100
+#define MAXN 501000
 #define LEFT(p) (2*p+1)
 #define RIGHT(p) (2*p+2)
 #define MID(a, b) ((a+b)/2)
 
 struct node {
 	int sum;
-	int minimum;
-	node() {}
-	node(char c) {
-		sum = (c=='(' ? 1 : -1);
-		minimum = min(0, sum);
+	node() {
+		sum = 0;
 	}
-	node(int a, int b) {
-		sum = a;
-		minimum = b;
+	node(int v) {
+		sum = v;
 	}
+	
 };
 	
-node st[8*MAXN];
-char word[2*MAXN];
+node st[4*MAXN];
+int arr[MAXN];
 
 node join(node left, node right) {
 	int sum = left.sum + right.sum;
-	int minimum = min(left.minimum, right.minimum+left.sum);
-	return node(sum, minimum);
+	return node(sum);
 }
 
 void build(int p, int beg, int end) {
 	if(beg > end) return;
 	if(beg == end) {
-		st[p] = node(word[beg]);
+		st[p] = node(arr[beg]);
 		return;
 	}
 	build(LEFT(p), beg, MID(beg, end));
@@ -65,28 +61,12 @@ node read(int p, int i, int j, int beg, int end)  {
 }
 
 int main() {
-	for(int test = 1; test<=10; test++) {
-		printf("Test %d:\n", test);
-		int n;
-		scanf("%d", &n);
-		scanf(" %s", word);
-		build(1, 0, n-1);
-		//printf("%d", read(1, 0, n-1));
-		int m;
-		scanf("%d", &m);
-		for(int i = 0; i<m; i++) {
-			int q;
-			scanf("%d", &q);
-			if(q == 0) {
-				printf("%s\n", read(1, 0, n-1, 0, n-1).minimum == 0?"YES":"NO"); 
-			}
-			else {
-				if(word[q-1] == ')') word[q-1] = '(';
-				else  word[q-1] = ')';
-				update(1, q-1, 0, n-1, word[q-1]);
-			}
-		}
+	int n, m;
+	scanf("%d %d", &n, &m);
+	for(int i = 0; i<n; i++) {
+		scanf("%d", &arr[i]);
 	}
+	build(0, 0, n-1);
 	return 0;
 }
 
